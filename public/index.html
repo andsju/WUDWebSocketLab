@@ -7,11 +7,21 @@
     <title>Websocket</title>
 </head>
 <body>
+
+    <div id="status"></div>
     
     <script>
 
         // use WebSocket
         const websocket = new WebSocket("ws://localhost:8081");
+
+        // listen on close event (server)
+        websocket.addEventListener('close', (event) => {
+            console.log('Server down...', event);
+            document.getElementById("status").textContent = "Sry....server down"; 
+            
+        });
+        
 
     </script>
 
