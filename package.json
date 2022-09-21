@@ -1,0 +1,23 @@
+{
+  "name": "wudwebsocketlab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andsju/WUDWebSocketLab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andsju/WUDWebSocketLab/issues"
+  },
+  "homepage": "https://github.com/andsju/WUDWebSocketLab#readme",
+  "dependencies": {
+    "ws": "^8.8.1"
+  }
+}
