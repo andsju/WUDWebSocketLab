@@ -12,11 +12,26 @@
 
     <div id="status"></div>
 
+    <!-- input nickname -->
+    <input type="text" id="nickname" placeholder="Enter nickname">
+    <button id="setNickname">Set nickname</button>
+
+    <!-- input chat -->
+    <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
+
+
     <script>
 
+        // DOM elements
+        const inputText = document.getElementById("inputText");
+        const nickname = document.getElementById("nickname");
+        const setNickname = document.querySelector("#setNickname");
 
         // use WebSocket
         const websocket = new WebSocket("ws://localhost:8081");
+
+        // event listeners
+
 
         // listen on close event (server)
         websocket.addEventListener('close', (event) => {
@@ -36,7 +51,49 @@
 
         });
 
+        setNickname.addEventListener("click", () => {
 
+            // get value from input nickname
+            let nickname = document.getElementById("nickname").value;
+            console.log(nickname);
+
+            // if set - disable input nickname
+            document.getElementById("nickname").setAttribute("disabled", true);
+
+            // enable input field
+            document.getElementById("inputText").removeAttribute("disabled");
+
+            // focus input field
+            document.getElementById("inputText").focus();
+        });
+
+
+        inputText.addEventListener("keydown", (event) => {
+            // console.log(event);
+
+            // press Enter...
+            if (event.key === "Enter") {
+
+                // chat message - send text to server
+                // chat messade
+                let objMessage = {
+                    msg: inputText.value
+                }
+
+                // send text to server
+                websocket.send(JSON.stringify(objMessage));
+                
+                // reset input field
+                inputText.value = "";
+            }
+
+        });
+
+
+
+
+
+        // functions...
 
         /**
          * parse JSON
