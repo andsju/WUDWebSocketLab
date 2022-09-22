@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Websocket</title>
 </head>
+
 <body>
 
     <div id="status"></div>
-    
+
     <script>
+
 
         // use WebSocket
         const websocket = new WebSocket("ws://localhost:8081");
@@ -18,14 +21,46 @@
         // listen on close event (server)
         websocket.addEventListener('close', (event) => {
             console.log('Server down...', event);
-            document.getElementById("status").textContent = "Sry....server down"; 
+            document.getElementById("status").textContent = "Sry....server down";
 
         });
-        
-        // send json to server
+
+        // send json to server - console.log() for now...
+
+        // listen to messages from client | server
+        websocket.addEventListener('message', (event) => {
+            // console.log(event.data);
+
+            let obj = parseJSON(event.data);
+            console.log(obj.msg);
+
+        });
+
+
+
+        /**
+         * parse JSON
+         *
+         * @param {*} data
+         * @return {obj} 
+         */
+        function parseJSON(data) {
+
+            // try to parse json
+            try {
+                let obj = JSON.parse(data);
+
+                return obj;
+            } catch (error) {
+
+                // log to file in real application....
+                return { error: "An error receving data...expected json format" };
+            }
+        }
 
 
     </script>
 
 </body>
+
 </html>

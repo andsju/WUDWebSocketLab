@@ -28,6 +28,25 @@ wss.on('connection', (ws) => {
         let obj = parseJSON(data);
         console.log('obj', obj);
 
-    });
+        // send message back to client
 
+        let objReply = {
+            type: "text",
+            msg: `I received a message from you: ${obj.msg}`
+        }
+
+        // send a stringified object back
+        ws.send(JSON.stringify(objReply));
+
+        let objBroadcast = {
+            type: "text",
+            msg: `Someone said: ${obj.msg}`
+        }
+
+        // broadcast to all clients
+        wss.clients.forEach((client) => {
+            client.send(JSON.stringify(objBroadcast));
+        });
+
+    });
 });

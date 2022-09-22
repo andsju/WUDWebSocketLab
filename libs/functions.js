@@ -1,3 +1,9 @@
+/**
+ * parse JSON
+ *
+ * @param {*} data
+ * @return {obj} 
+ */
 function parseJSON(data) {
 
     // try to parse json
@@ -8,7 +14,6 @@ function parseJSON(data) {
     } catch (error) {
         
         // log to file in real application....
-
         return {error: "An error receving data...expected json format"};
     }
 }
