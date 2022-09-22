@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 
 // import functions
-import { parseJSON } from './libs/functions.js';
+import { parseJSON, broadcast, broadcastButExclude } from './libs/functions.js';
 
 // create WebSocket server
 const wss = new WebSocketServer({port: 8081})
@@ -44,9 +44,10 @@ wss.on('connection', (ws) => {
         }
 
         // broadcast to all clients
-        wss.clients.forEach((client) => {
-            client.send(JSON.stringify(objBroadcast));
-        });
+        // broadcast(wss, objBroadcast);
+
+        // broadcast to all but this ws...
+        broadcastButExclude(wss, ws, objBroadcast);
 
     });
 });
