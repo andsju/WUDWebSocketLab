@@ -42,9 +42,9 @@
 
     <!-- DOM - chat -->
 
-    <ul>
-        <li><span>Frodo</span><p>Hej på er!</p><time datetime="2022-09-28T09:35:00">09:35</time></li>
+    <ul id="conversation">
         <li><span>Merry</span><p>Aloha</p><time datetime="2022-09-28T09:36:00">09:36</time></li>
+        <li><span>Frodo</span><p>Hej på er!</p><time datetime="2022-09-28T09:35:00">09:35</time></li>
     </ul>
 
     <!-- use template to set html structure for a message -->
@@ -70,6 +70,30 @@
 
         // use WebSocket
         const websocket = new WebSocket("ws://localhost:8081");
+
+
+
+        // use template - cloneNode to get a document fragment
+        let template = document.getElementById("message").cloneNode(true);
+        console.log("template", template);
+
+        // fragment using JavaScript
+        // let fragment = new DocumentFragment();
+
+        // use content to access ...
+        let newMsg = template.content;
+
+        // change content...
+        newMsg.querySelector("span").textContent = "Pippin";
+        newMsg.querySelector("p").textContent = "What about second breakfast?";
+        newMsg.querySelector("time").textContent = "09:51"
+
+        document.getElementById("conversation").prepend(newMsg);
+
+        // todo - create a function to insert new chat messages ...
+
+
+
 
         // event listeners
 
