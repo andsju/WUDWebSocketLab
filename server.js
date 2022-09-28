@@ -4,7 +4,7 @@ import { WebSocketServer } from 'ws';
 import { parseJSON, broadcast, broadcastButExclude } from './libs/functions.js';
 
 // create WebSocket server
-const wss = new WebSocketServer({port: 8081})
+const wss = new WebSocketServer({port: 8081});
 
 // listen on new connections
 wss.on('connection', (ws) => {
@@ -32,7 +32,9 @@ wss.on('connection', (ws) => {
 
         let objReply = {
             type: "text",
-            msg: `I received a message from you: ${obj.msg}`
+            // msg: `I received a message from you: ${obj.msg}`
+            msg: obj.msg,
+            nickname: obj.nickname
         }
 
         // send a stringified object back
@@ -40,7 +42,9 @@ wss.on('connection', (ws) => {
 
         let objBroadcast = {
             type: "text",
-            msg: `Someone said: ${obj.msg}`
+            // msg: `Someone said: ${obj.msg}`
+            msg: obj.msg,
+            nickname: obj.nickname
         }
 
         // broadcast to all clients

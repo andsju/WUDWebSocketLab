@@ -24,8 +24,10 @@
 
         // DOM elements
         const inputText = document.getElementById("inputText");
-        const nickname = document.getElementById("nickname");
         const setNickname = document.querySelector("#setNickname");
+
+        // variable current user / nickname / undefined
+        let nickname;
 
         // use WebSocket
         const websocket = new WebSocket("ws://localhost:8081");
@@ -47,14 +49,14 @@
             // console.log(event.data);
 
             let obj = parseJSON(event.data);
-            console.log(obj.msg);
+            console.log(obj.type, obj.msg, obj.nickname);
 
         });
 
         setNickname.addEventListener("click", () => {
 
             // get value from input nickname
-            let nickname = document.getElementById("nickname").value;
+            nickname = document.getElementById("nickname").value;
             console.log(nickname);
 
             // if set - disable input nickname
@@ -71,13 +73,14 @@
         inputText.addEventListener("keydown", (event) => {
             // console.log(event);
 
-            // press Enter...
-            if (event.key === "Enter") {
+            // press Enter...make sure at least one char
+            if (event.key === "Enter" && inputText.value.length > 0) {
 
                 // chat message - send text to server
-                // chat messade
+                // chat message
                 let objMessage = {
-                    msg: inputText.value
+                    msg: inputText.value,
+                    nickname: nickname
                 }
 
                 // send text to server
