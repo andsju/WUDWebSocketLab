@@ -38,7 +38,7 @@ wss.on('connection', (ws) => {
         }
 
         // send a stringified object back
-        ws.send(JSON.stringify(objReply));
+        // ws.send(JSON.stringify(objReply));
 
         let objBroadcast = {
             type: "text",

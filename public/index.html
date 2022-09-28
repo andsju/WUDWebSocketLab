@@ -8,7 +8,6 @@
     <title>Websocket</title>
 
     <style>
-
         ul {
             margin: 2rem 0;
             padding: 0;
@@ -20,10 +19,10 @@
             /* child elements */
             grid-template-columns: 1fr 5fr 1fr;
         }
+
         li p {
             margin: 0
         }
-
     </style>
 </head>
 
@@ -43,8 +42,12 @@
     <!-- DOM - chat -->
 
     <ul id="conversation">
-        <li><span>Merry</span><p>Aloha</p><time datetime="2022-09-28T09:36:00">09:36</time></li>
-        <li><span>Frodo</span><p>Hej på er!</p><time datetime="2022-09-28T09:35:00">09:35</time></li>
+        <li><span>Merry</span>
+            <p>Aloha</p><time datetime="2022-09-28T09:36:00">09:36</time>
+        </li>
+        <li><span>Frodo</span>
+            <p>Hej på er!</p><time datetime="2022-09-28T09:35:00">09:35</time>
+        </li>
     </ul>
 
     <!-- use template to set html structure for a message -->
@@ -56,7 +59,7 @@
             <time datetime=""></time>
         </li>
 
-    </template>    
+    </template>
 
 
     <script>
@@ -72,31 +75,10 @@
         const websocket = new WebSocket("ws://localhost:8081");
 
 
-
-        // use template - cloneNode to get a document fragment
-        let template = document.getElementById("message").cloneNode(true);
-        console.log("template", template);
-
-        // fragment using JavaScript
-        // let fragment = new DocumentFragment();
-
-        // use content to access ...
-        let newMsg = template.content;
-
-        // change content...
-        newMsg.querySelector("span").textContent = "Pippin";
-        newMsg.querySelector("p").textContent = "What about second breakfast?";
-        newMsg.querySelector("time").textContent = "09:51"
-
-        document.getElementById("conversation").prepend(newMsg);
-
-        // todo - create a function to insert new chat messages ...
-
-
-
+        // test function to add message to conversation
+        renderMessage({nickname: "Sam", msg: "Mr Frodo..."});
 
         // event listeners
-
 
         // listen on close event (server)
         websocket.addEventListener('close', (event) => {
@@ -113,6 +95,8 @@
 
             let obj = parseJSON(event.data);
             console.log(obj.type, obj.msg, obj.nickname);
+
+            renderMessage(obj);
 
         });
 
@@ -146,9 +130,12 @@
                     nickname: nickname
                 }
 
+                // show new message for this user
+                renderMessage(objMessage);
+
                 // send text to server
                 websocket.send(JSON.stringify(objMessage));
-                
+
                 // reset input field
                 inputText.value = "";
             }
@@ -181,6 +168,37 @@
             }
         }
 
+
+        /**
+         * render new message
+         *
+         * @param {obj}  
+         */
+        function renderMessage(obj) {
+
+            // use template - cloneNode to get a document fragment
+            let template = document.getElementById("message").cloneNode(true);
+
+            // use content to access ...
+            let newMsg = template.content;
+
+            // change content...
+            newMsg.querySelector("span").textContent = obj.nickname;
+            newMsg.querySelector("p").textContent = obj.msg;
+            
+            // new date object
+            let objDate = new Date();
+            
+            // visual: 10:41 .. 9:5 ... leading zero....
+            newMsg.querySelector("time").textContent = objDate.getHours() + ":" + objDate.getMinutes();
+
+            // set datetime attribute - see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/time
+            newMsg.querySelector("time").setAttribute("datetime", objDate.toISOString());
+            
+            // render using prepend method - last message first 
+            document.getElementById("conversation").prepend(newMsg);
+
+        }
 
     </script>
 
