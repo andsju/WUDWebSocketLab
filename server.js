@@ -21,37 +21,18 @@ wss.on('connection', (ws) => {
 
     // message event
     ws.on('message', (data) => {
-        console.log('Message received: %s', data);
+        // console.log('Message received: %s', data);
 
-        // avoid error using try-catch - server still running!
-        // use defined functions to handle errors - better code
         let obj = parseJSON(data);
-        console.log('obj', obj);
 
-        // send message back to client
-
-        let objReply = {
-            type: "text",
-            // msg: `I received a message from you: ${obj.msg}`
-            msg: obj.msg,
-            nickname: obj.nickname
-        }
-
-        // send a stringified object back
-        // ws.send(JSON.stringify(objReply));
-
+        // message to clients
         let objBroadcast = {
             type: "text",
-            // msg: `Someone said: ${obj.msg}`
             msg: obj.msg,
             nickname: obj.nickname
         }
-
-        // broadcast to all clients
-        // broadcast(wss, objBroadcast);
 
         // broadcast to all but this ws...
         broadcastButExclude(wss, ws, objBroadcast);
-
     });
 });

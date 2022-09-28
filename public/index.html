@@ -28,6 +28,7 @@
 
 <body>
 
+    <!-- server status -->
     <div id="status"></div>
 
     <!-- input nickname -->
@@ -37,18 +38,8 @@
     <!-- input chat -->
     <input type="text" id="inputText" placeholder="Type and press Enter" disabled>
 
-
-
-    <!-- DOM - chat -->
-
-    <ul id="conversation">
-        <li><span>Merry</span>
-            <p>Aloha</p><time datetime="2022-09-28T09:36:00">09:36</time>
-        </li>
-        <li><span>Frodo</span>
-            <p>Hej på er!</p><time datetime="2022-09-28T09:35:00">09:35</time>
-        </li>
-    </ul>
+    <!-- DOM chat -->
+    <ul id="conversation"></ul>
 
     <!-- use template to set html structure for a message -->
     <template id="message">
@@ -61,50 +52,42 @@
 
     </template>
 
-
     <script>
 
         // DOM elements
         const inputText = document.getElementById("inputText");
         const setNickname = document.querySelector("#setNickname");
 
-        // variable current user / nickname / undefined
+        // variable current user | nickname
         let nickname;
 
         // use WebSocket
         const websocket = new WebSocket("ws://localhost:8081");
 
 
-        // test function to add message to conversation
-        renderMessage({nickname: "Sam", msg: "Mr Frodo..."});
 
+        
         // event listeners
 
         // listen on close event (server)
         websocket.addEventListener('close', (event) => {
-            console.log('Server down...', event);
+            // console.log('Server down...', event);
             document.getElementById("status").textContent = "Sry....server down";
-
         });
 
-        // send json to server - console.log() for now...
 
         // listen to messages from client | server
         websocket.addEventListener('message', (event) => {
             // console.log(event.data);
 
             let obj = parseJSON(event.data);
-            console.log(obj.type, obj.msg, obj.nickname);
-
             renderMessage(obj);
-
         });
 
         setNickname.addEventListener("click", () => {
 
             // get value from input nickname
             nickname = document.getElementById("nickname").value;
-            console.log(nickname);
 
             // if set - disable input nickname
             document.getElementById("nickname").setAttribute("disabled", true);
@@ -118,13 +101,11 @@
 
 
         inputText.addEventListener("keydown", (event) => {
-            // console.log(event);
 
             // press Enter...make sure at least one char
             if (event.key === "Enter" && inputText.value.length > 0) {
 
-                // chat message - send text to server
-                // chat message
+                // chat message object
                 let objMessage = {
                     msg: inputText.value,
                     nickname: nickname
@@ -133,16 +114,13 @@
                 // show new message for this user
                 renderMessage(objMessage);
 
-                // send text to server
+                // send to server
                 websocket.send(JSON.stringify(objMessage));
 
                 // reset input field
                 inputText.value = "";
             }
-
         });
-
-
 
 
 
@@ -179,7 +157,7 @@
             // use template - cloneNode to get a document fragment
             let template = document.getElementById("message").cloneNode(true);
 
-            // use content to access ...
+            // access content
             let newMsg = template.content;
 
             // change content...
@@ -197,7 +175,6 @@
             
             // render using prepend method - last message first 
             document.getElementById("conversation").prepend(newMsg);
-
         }
 
     </script>
