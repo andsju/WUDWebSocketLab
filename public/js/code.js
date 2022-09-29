@@ -2,13 +2,19 @@
 const inputText = document.getElementById("inputText");
 const setNickname = document.querySelector("#setNickname");
 
+
 // variable current user | nickname
 let nickname;
 
-// use WebSocket
-const websocket = new WebSocket("ws://localhost:8081");
 
-// event listeners
+// use WebSocket >>> make sure server uses same ws port!
+const websocket = new WebSocket("ws://localhost:80");  
+
+
+
+
+/* event listeners
+------------------------------- */
 
 // listen on close event (server)
 websocket.addEventListener("close", (event) => {
@@ -21,6 +27,19 @@ websocket.addEventListener("message", (event) => {
     // console.log(event.data);
 
     let obj = parseJSON(event.data);
+
+    // todo
+    // use obj property 'type' to handle message event
+    switch (obj.type) {
+        case "text":
+            break;
+        case "somethingelse":
+            break;
+        default:
+            break;
+    }
+
+    // ...
     renderMessage(obj);
 });
 
@@ -58,7 +77,13 @@ inputText.addEventListener("keydown", (event) => {
     }
 });
 
-// functions...
+
+
+
+
+/* functions...
+------------------------------- */
+
 
 /**
  * parse JSON
